@@ -1,6 +1,9 @@
 # Libgeo
 
-TODO: Write a gem description
+Collection of geographical primitives
+
+- [![Build Status](https://travis-ci.org/Ptico/libgeo.png?branch=master)](https://travis-ci.org/Ptico/libgeo)
+- [![Code Climate](https://codeclimate.com/github/Ptico/libgeo.png)](https://codeclimate.com/github/Ptico/libgeo)
 
 ## Installation
 
@@ -18,11 +21,29 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Latitude/Longitude
+
+```ruby
+lng = Longitude.decimal(39.342679)
+
+lng.hemisphere # => :E
+lng.degrees    # => 39
+lng.minutes    # => 20
+lng.seconds    # => 33.6444
+
+lng.western?   # => false
+lng.eastern?   # => true
+
+lng.to_s    # => '39°20′33.6444″E'
+lng.to_nmea # => '03920.56074,E'
+
+lng.western!
+lng.hemisphere # => :W
+```
 
 ## Contributing
 
-1. Fork it ( http://github.com/ptico/libgeo/fork )
+1. Fork it ( http://github.com/Ptico/libgeo/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)

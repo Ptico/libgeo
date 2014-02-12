@@ -27,7 +27,7 @@ module Libgeo
     # Create new string representing coordinate
     #
     # Params:
-    # - coordinate {Latitude, Longitude} source coordinate
+    # - coordinate {Latitude|Longitude} source coordinate
     # - evaluator  {Class}               private
     #
     # Returns: {String} formatted string

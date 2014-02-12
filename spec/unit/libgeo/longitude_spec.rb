@@ -269,4 +269,8 @@ describe Libgeo::Longitude do
     it { expect(subject).to eql(expected) }
   end
 
+  describe '#to_utm' do
+    pending 'TODO'
+  end
+
 end

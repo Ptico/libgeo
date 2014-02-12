@@ -7,6 +7,12 @@ require 'libgeo/coordinate/presenters'
 require 'libgeo/coordinate/hemi_helpers'
 
 module Libgeo
+  ##
+  # Class: basic coordinate
+  #
+  # Provides basic functionality for Latitude and Longitude.
+  # In some cases can be used as standalone class.
+  #
   class Coordinate
     extend ClassMethods
     include Presenters
@@ -24,18 +30,42 @@ module Libgeo
     alias :mins :minutes
     alias :secs :seconds
 
+    ##
+    # Coordinate type
+    #
     def type
       nil
     end
 
+    ##
+    # Decimal minutes with seconds included
+    #
+    # Returns: {Float} minutes
+    #
     def minutes_only
       (minutes + seconds.to_d / 60).to_f
     end
 
+    ##
+    # Hemisphere validator
+    #
+    # Validates if given value can be assigned to Coordinate
+    # or if current hemi is valid
+    #
+    # Params:
+    # - value hemisphere value to check (optional)
+    #
+    # Returns: {Boolean}
+    #
     def valid_hemisphere?(value=nil)
       self.class::HEMISPHERES.include?(value || hemisphere)
     end
 
+    ##
+    # Check if current hemisphere negative
+    #
+    # Returns: {Boolean}
+    #
     def negative_hemisphere?
       if valid_hemisphere?
         NEGATIVE_HEMISPHERES.include?(hemi)
@@ -46,6 +76,9 @@ module Libgeo
       end
     end
 
+    ##
+    # Freeze all the things!
+    #
     def freeze
       normalize_data
 
@@ -58,6 +91,15 @@ module Libgeo
 
     attr_reader :direction
 
+    ##
+    # Constructor:
+    #
+    # Params:
+    # - hemi_or_dir {Symbol|String} hemisphere value or direction
+    # - degrees     {Fixnum}        degrees part
+    # - minutes     {Fixnum}        minutes part
+    # - seconds     {Float}         seconds part
+    #
     def initialize(hemi_or_dir, degrees, minutes, seconds)
       @degrees = degrees
       @minutes = minutes
@@ -72,11 +114,20 @@ module Libgeo
       normalize_data
     end
 
+    ##
+    # Private: make sure that all attrs has right types
+    #
     def normalize_data
       normalize_hemi
       normalize_values
     end
 
+    ##
+    # Private: detect and assign hemisphere value
+    #
+    # Check if hemisphere can be properly detected
+    # and assign it
+    #
     def normalize_hemi
       if hemisphere
         normalize_hemi_wording
@@ -85,6 +136,12 @@ module Libgeo
       end
     end
 
+    ##
+    # Private: normalize hemisphere value
+    #
+    # If hemisphere have incorrect value - lookup for
+    # available correction from dictionary
+    #
     def normalize_hemi_wording
       unless valid_hemisphere?
         self.class::CORRECTIONS.each_pair do |v, c|
@@ -93,10 +150,18 @@ module Libgeo
       end
     end
 
+    ##
+    # Private: get hemisphere value from direction
+    #
+    # Mostly for plain Coordinate instance (not Latitude or Longitude)
+    #
     def get_hemi_from_direction
       @hemisphere = self.class::DIRECTIONS[direction]
     end
 
+    ##
+    # Private: normalize attribute types
+    #
     def normalize_values
       @degrees = degrees.to_i
       @minutes = minutes.to_i

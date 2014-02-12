@@ -24,7 +24,7 @@ module Libgeo
       #     pad(42, 3)      # => '042'
       #
       # Params:
-      # - val {String, Numeric} number to process
+      # - val {String|Numeric} number to process
       # - num {Fixnum}          length of int part
       #
       # Returns: {String} number with or without zeroes added

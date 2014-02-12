@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'spec_helper'
 
 describe Libgeo::Formatter::Evaluator do
@@ -63,5 +65,5 @@ describe Libgeo::Formatter::Evaluator do
       end
     end
   end
-  
+
 end

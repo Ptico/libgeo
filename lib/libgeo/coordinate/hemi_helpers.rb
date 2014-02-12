@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Libgeo
   class Coordinate
     module HemiHelpers

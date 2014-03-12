@@ -48,10 +48,10 @@ module Libgeo
       #
       # Example:
       #
-      #     Longitude.nmea('58°39′13.5 S') # => #<Longitude hemisphere=S degrees=58 minutes=39 ...
+      #     Longitude.dms('58°39′13.5 S') # => #<Longitude hemisphere=S degrees=58 minutes=39 ...
       #
       # Params:
-      # - value {String} nmea coordinate
+      # - value {String} dms coordinate
       #
       # Returns: {Latitude|Longitude|Coordinate} instance
       #

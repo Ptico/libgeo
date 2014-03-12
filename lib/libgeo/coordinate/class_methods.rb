@@ -21,6 +21,30 @@ module Libgeo
       end
 
       ##
+      # Factory: make a coordinate from nmea value
+      #
+      # Example:
+      #
+      #     Longitude.nmea('03920.56074,E') # => #<Longitude hemisphere=E degrees=39 minutes=20 ...
+      #
+      # Params:
+      # - value {String} nmea coordinate
+      #
+      # Returns: {Latitude|Longitude|Coordinate} instance
+      #
+      def nmea(value)
+        numbers, char = value.split(',')
+        numbers = numbers.to_f
+        
+        direction = dir_from_nmea(numbers, char)
+
+        degrees = numbers.to_i.abs/100
+
+        self.new(direction, degrees, *min_with_sec_nmea(numbers.abs))
+      end
+
+
+      ##
       # Factory: make a coordinate from degrees and full minutes
       #
       # Example:
@@ -50,11 +74,31 @@ module Libgeo
       end
 
       ##
+      # Private: calculate minutes and seconds from nmea coord
+      #
+      def min_with_sec_nmea(value)
+        minutes = value.to_i.divmod(100)[1] # 3920 => [39, 20] => 20
+        seconds = (value.modulo(1)*60).round 4
+        [minutes, seconds]
+      end      
+
+      ##
       # Private: detect direction based on neg/pos
       #
       def dir_from(degrees)
         degrees < 0 ? :< : :>
       end
+
+      ##
+      # Private: detect direction based on nmea notation
+      #
+      def dir_from_nmea(numbers, char)
+        if char  
+          (NEGATIVE_HEMISPHERES.include? char.to_sym) ? :< : :>
+        else
+          dir_from(numbers.to_i)
+        end
+      end      
     end
   end
 end

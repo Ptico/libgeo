@@ -36,13 +36,38 @@ module Libgeo
         numbers, char = value.split(',')
         numbers = numbers.to_f
         
-        direction = dir_from_nmea(numbers, char)
+        direction = dir_from_values(numbers, char)
 
         degrees = numbers.to_i.abs/100
 
         self.new(direction, degrees, *min_with_sec_nmea(numbers.abs))
       end
 
+      ##
+      # Factory: make a coordinate from dms value
+      #
+      # Example:
+      #
+      #     Longitude.nmea('58°39′13.5 S') # => #<Longitude hemisphere=S degrees=58 minutes=39 ...
+      #
+      # Params:
+      # - value {String} nmea coordinate
+      #
+      # Returns: {Latitude|Longitude|Coordinate} instance
+      #
+      def dms(value)
+        string_values = value.split(/[^0-9\-.NWSE]/)
+
+        degrees, minutes = string_values.map{ |x| x.to_i }[0, 2] # get degrees and minutes 
+
+        seconds = string_values[2].to_f
+
+        char = string_values[3]
+        
+        direction = dir_from_values(degrees, char)
+
+        self.new(direction, degrees.abs, minutes, seconds)
+      end
 
       ##
       # Factory: make a coordinate from degrees and full minutes
@@ -90,9 +115,9 @@ module Libgeo
       end
 
       ##
-      # Private: detect direction based on nmea notation
+      # Private: detect direction based on nmea or dms notation
       #
-      def dir_from_nmea(numbers, char)
+      def dir_from_values(numbers, char)
         if char  
           (NEGATIVE_HEMISPHERES.include? char.to_sym) ? :< : :>
         else

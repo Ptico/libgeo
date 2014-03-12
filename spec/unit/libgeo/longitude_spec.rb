@@ -32,6 +32,50 @@ describe Libgeo::Longitude do
     end
   end
 
+  describe '.dms' do
+    subject { described_class.dms(dms) }
+
+    context 'with characters' do
+      context 'when positive' do
+        let(:dms) { '58°39′13.5 E' }
+
+        it { expect(subject.hemisphere).to eql(Libgeo::EAST) }
+        it { expect(subject.degrees).to eql(58) }
+        it { expect(subject.minutes).to eql(39) }
+        it { expect(subject.seconds).to eql(13.5) }
+      end
+
+      context 'when negative' do
+        let(:dms) { '58°39′13.5 W' }
+
+        it { expect(subject.hemisphere).to eql(Libgeo::WEST) }
+        it { expect(subject.degrees).to eql(58) }
+        it { expect(subject.minutes).to eql(39) }
+        it { expect(subject.seconds).to eql(13.5) }
+      end
+    end
+
+    context 'without characters' do
+      context 'when positive' do
+        let(:dms) { '58°39′13.5' }
+
+        it { expect(subject.hemisphere).to eql(Libgeo::EAST) }
+        it { expect(subject.degrees).to eql(58) }
+        it { expect(subject.minutes).to eql(39) }
+        it { expect(subject.seconds).to eql(13.5) }
+      end
+
+      context 'when negative' do
+        let(:dms) { '-58°39′13.5' }
+
+        it { expect(subject.hemisphere).to eql(Libgeo::WEST) }
+        it { expect(subject.degrees).to eql(58) }
+        it { expect(subject.minutes).to eql(39) }
+        it { expect(subject.seconds).to eql(13.5) }
+      end
+    end
+  end
+
   describe '.nmea' do
     subject { described_class.nmea(nmea) }
 

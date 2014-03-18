@@ -38,7 +38,7 @@ module Libgeo
         
         direction = dir_from_values(numbers, char)
 
-        degrees = numbers.to_i.abs/100
+        degrees = numbers.to_i.abs / 100
 
         self.new(direction, degrees, *min_with_sec_nmea(numbers.abs))
       end
@@ -48,7 +48,7 @@ module Libgeo
       #
       # Example:
       #
-      #     Longitude.dms('58°39′13.5 S') # => #<Longitude hemisphere=S degrees=58 minutes=39 ...
+      #     Longitude.dms("58°39′13.5 S") # => #<Longitude hemisphere=S degrees=58 minutes=39 ...
       #
       # Params:
       # - value {String} dms coordinate
@@ -102,7 +102,7 @@ module Libgeo
       # Private: calculate minutes and seconds from nmea coord
       #
       def min_with_sec_nmea(value)
-        minutes = value.to_i.divmod(100)[1] # 3920 => [39, 20] => 20
+        minutes = value.to_i % 100
         seconds = (value.modulo(1)*60).round 4
         [minutes, seconds]
       end      

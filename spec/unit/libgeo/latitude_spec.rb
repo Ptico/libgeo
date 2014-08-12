@@ -158,6 +158,12 @@ describe Libgeo::Latitude do
     it_behaves_like 'Coordinate#seconds'
   end
 
+  describe 'different inputs' do
+    it_behaves_like 'Coordinate#inputs' do
+      let(:hemisphere) { :S }
+    end
+  end
+
   describe '#hemisphere' do
     subject { instance.hemisphere }
 

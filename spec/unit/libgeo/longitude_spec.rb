@@ -157,6 +157,12 @@ describe Libgeo::Longitude do
     it_behaves_like 'Coordinate#seconds'
   end
 
+  describe 'different inputs' do
+    it_behaves_like 'Coordinate#inputs' do
+      let(:hemisphere) { :E }
+    end
+  end
+
   describe '#hemisphere' do
     subject { instance.hemisphere }
 

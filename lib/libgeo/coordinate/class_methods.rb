@@ -4,18 +4,13 @@ module Libgeo
   class Coordinate
     module ClassMethods
 
-      # DMS_NOTATION = /-?[0-9]{2}(['°"`\ -][0-9]{2}){0,2}(\.[0-9]+)?(\ [ESWN])?/.freeze
-
-      # NMEA_NOTATION = /[0-9]{5}\.[0-9]+((,|\ |,\ )[ESWN])?/.freeze
-
-      DMS_SEPARATORS = /[^0-9\-.NWSE]+/.freeze
-
-      NMEA_SEPARATORS = /(,\ |,|\ )/
+      DMS_SEPARATORS  = /[^0-9\-.NWSE]+/.freeze
+      NMEA_SEPARATORS = /(,\ |,|\ )/.freeze
 
       ##
       # Factory: make a coordinate from decimal value
       #
-      # Example:
+      # Examples:
       #
       #     Longitude.decimal(39.342679) # => #<Longitude hemisphere=E degrees=39 minutes=20 ...
       #
@@ -32,7 +27,7 @@ module Libgeo
       ##
       # Factory: make a coordinate from nmea input
       #
-      # Example:
+      # Examples:
       #
       #     Longitude.nmea('03920.56074,E') # => #<Longitude hemisphere=E degrees=39 minutes=20 ...
       #
@@ -56,7 +51,7 @@ module Libgeo
       ##
       # Factory: make a coordinate from dms value
       #
-      # Example:
+      # Examples:
       #
       #     Longitude.dms("58°39′13.5 S") # => #<Longitude hemisphere=S degrees=58 minutes=39 ...
       #
@@ -105,6 +100,7 @@ module Libgeo
       # - input {String} input string in nmea notation
       #
       # Examples:
+      #
       #     input # => "03922.54, E"
       #     prepare_nmea(input) # => ["03922.54", "E"]
       #
@@ -151,16 +147,37 @@ module Libgeo
       ##
       # Private: detect direction based on neg/pos
       #
+      # Params:
+      # - degrees {Integer} degrees
+      #
+      # Examples:
+      #
+      #     dir_from(-5) # => :<
+      #     dir_from(10) # => :>
+      #
+      # Returns: {Symbol} symbol of direction
+      #
       def dir_from(degrees)
         degrees < 0 ? :< : :>
       end
 
       ##
-      # Private: detect direction based on nmea or dms notation
+      # Private: detect direction from degrees of hemisphere
       #
-      def dir_from_values(numbers, char)
-        if char
-          (NEGATIVE_HEMISPHERES.include? char.to_sym) ? :< : :>
+      # Params:
+      # - numbers {Ineteger|Float|Decimal} numerical value of coordinate (degrees)
+      # - hemi {String|Symbol|nil} hemisphere if available
+      #
+      # Examples:
+      #
+      #     dir_from_values(43, 'S') # => :<
+      #     dir_from_values(43, nil) # => :>
+      #
+      # Returns: {Symbol} symbol of direction
+      #
+      def dir_from_values(numbers, hemi)
+        if hemi
+          (NEGATIVE_HEMISPHERES.include? hemi.to_sym) ? :< : :>
         else
           dir_from(numbers.to_i)
         end

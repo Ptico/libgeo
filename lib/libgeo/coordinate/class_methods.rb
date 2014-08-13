@@ -182,33 +182,60 @@ module Libgeo
         end
       end
 
+      ##
+      # Private: fabric. Make a coordinate from given values
+      #
+      # Params:
+      # - direction {Symbol} symbol of hemisphere direction
+      # - degrees {Integer}
+      # - minutes {Integer}
+      # - second {Integer|Float}
+      # - hemi {Symbol|String} (optional) hemisphere
+      #
+      # Raises:
+      # - {ArgumentError} on wrong params values
+      #
+      # Returns: {Longitude|Latotude} created coordinate
+
       def create(direction, degrees, minutes, seconds, hemi=nil)
         validate_values(degrees, minutes, seconds, hemi)
 
         self.new(direction, degrees, minutes, seconds)
       end
 
+      ##
+      # Private: validates given values
+      #
+      # Params:
+      # - degrees {Ineteger}
+      # - minutes {Integer}
+      # - seconds {Ineteger|Float}
+      # - hemi {Symbol|String|nil} hemisphere
+      #
+      # Raises:
+      # - {ArgumentError} on wrong values
+      #
       def validate_values(degrees, minutes, seconds, hemi)
         if degrees > self::MAX_DEGREES || minutes > 60 || seconds > 60
           raise ArgumentError.new('values out of range')
         end
 
-        valid_hemisphere? hemi.to_sym if hemi
+        validate_hemisphere(hemi.to_sym) if hemi
       end
 
 
       ##
       # Hemisphere validator
       #
-      # Validates if given value can be assigned to Coordinate
-      # or if current hemi is valid
+      # Validates given hemisphere
       #
       # Params:
-      # - value hemisphere value to check (optional)
+      # - value {Symbol} - hemisphere
       #
-      # Returns: {Boolean}
+      # Raises:
+      # - {ArgumentError} on wrong hemisphere
       #
-      def valid_hemisphere?(value)
+      def validate_hemisphere(value)
         raise ArgumentError.new('wrong hemisphere') unless HEMISPHERES.include?(value)
       end
     end

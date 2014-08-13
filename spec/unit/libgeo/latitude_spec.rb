@@ -164,6 +164,12 @@ describe Libgeo::Latitude do
     end
   end
 
+  describe 'values validation' do
+    it_behaves_like 'Coordinate#validation' do
+      let(:max_degrees) { 90 }
+    end
+  end
+
   describe '#hemisphere' do
     subject { instance.hemisphere }
 

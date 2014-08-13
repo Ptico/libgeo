@@ -4,7 +4,7 @@ module Libgeo
   class Coordinate
     module ClassMethods
 
-      DMS_SEPARATORS  = /[^0-9\-.NWSE]+/.freeze
+      DMS_SEPARATORS  = /['°′"`\ \,]+/.freeze
       NMEA_SEPARATORS = /(,\ |,|\ )/.freeze
 
       ##
@@ -21,7 +21,7 @@ module Libgeo
       #
       def decimal(value)
         minutes = value.abs.to_d.modulo(1) * 60 # extract minutes from decimal degrees
-        self.new(dir_from(value), value.abs.to_i, *min_with_sec(minutes))
+        create(dir_from(value), value.abs.to_i, *min_with_sec(minutes))
       end
 
       ##
@@ -45,7 +45,7 @@ module Libgeo
 
         degrees = value.to_i.abs / 100
 
-        self.new(direction, degrees, *min_with_sec_nmea(value.abs))
+        create(direction, degrees, *min_with_sec_nmea(value.abs), hemi)
       end
 
       ##
@@ -56,22 +56,21 @@ module Libgeo
       #     Longitude.dms("58°39′13.5 S") # => #<Longitude hemisphere=S degrees=58 minutes=39 ...
       #
       # Params:
-      # - value {String} dms coordinate
+      # - inputs {String} dms coordinate
       #
       # Returns: {Latitude|Longitude|Coordinate} instance
       #
-      def dms(value)
-        string_values = value.split(DMS_SEPARATORS)
+      def dms(input)
+        string_values = input.split(DMS_SEPARATORS)
 
         degrees = string_values[0].to_i # get degrees and minutes
         minutes = (string_values[1] || 0).to_i
         seconds = (string_values[2] || 0).to_f
-
-        hemi = string_values[3]
+        hemi    = string_values[3]
 
         direction = dir_from_values(degrees, hemi)
 
-        self.new(direction, degrees.abs, minutes, seconds)
+        create(direction, degrees.abs, minutes, seconds, hemi)
       end
 
       ##
@@ -88,7 +87,7 @@ module Libgeo
       # Returns: {Latitude|Longitude|Coordinate} instance
       #
       def degrees_minutes(degrees, minutes)
-        self.new(dir_from(degrees), degrees.abs.to_i, *min_with_sec(minutes))
+        create(dir_from(degrees), degrees.abs.to_i, *min_with_sec(minutes))
       end
 
     private
@@ -181,6 +180,36 @@ module Libgeo
         else
           dir_from(numbers.to_i)
         end
+      end
+
+      def create(direction, degrees, minutes, seconds, hemi=nil)
+        validate_values(degrees, minutes, seconds, hemi)
+
+        self.new(direction, degrees, minutes, seconds)
+      end
+
+      def validate_values(degrees, minutes, seconds, hemi)
+        if degrees > self::MAX_DEGREES || minutes > 60 || seconds > 60
+          raise ArgumentError.new('values out of range')
+        end
+
+        valid_hemisphere? hemi.to_sym if hemi
+      end
+
+
+      ##
+      # Hemisphere validator
+      #
+      # Validates if given value can be assigned to Coordinate
+      # or if current hemi is valid
+      #
+      # Params:
+      # - value hemisphere value to check (optional)
+      #
+      # Returns: {Boolean}
+      #
+      def valid_hemisphere?(value)
+        raise ArgumentError.new('wrong hemisphere') unless HEMISPHERES.include?(value)
       end
     end
   end

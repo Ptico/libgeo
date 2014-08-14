@@ -39,6 +39,16 @@ lng.to_nmea # => '03920.56074,E'
 
 lng.western!
 lng.hemisphere # => :W
+
+ltt = Latitude.nmea('03920.56074,N')
+
+ltt.to_s  # => '39°20′33.6444″N'
+
+ltt_dms = Latitude.dms('39°20′33.6444″N')
+
+ltt_dms.to_s     # => '39°20′33.6444″N'
+ltt_dms.to_nmea  # => '3920.56074,N'
+
 ```
 
 ## Contributing

@@ -11,6 +11,8 @@ module Libgeo
     POSITIVE_HEMISPHERE = :N
     NEGATIVE_HEMISPHERE = :S
 
+    MAX_DEGREES = 90
+
     ##
     # Coordinate type
     #

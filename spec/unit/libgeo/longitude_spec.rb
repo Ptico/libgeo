@@ -32,6 +32,93 @@ describe Libgeo::Longitude do
     end
   end
 
+  describe '.dms' do
+    subject { described_class.dms(dms) }
+
+    context 'with characters' do
+      context 'when positive' do
+        let(:dms) { '58°39′13.5 E' }
+
+        it { expect(subject.hemisphere).to eql(Libgeo::EAST) }
+        it { expect(subject.degrees).to eql(58) }
+        it { expect(subject.minutes).to eql(39) }
+        it { expect(subject.seconds).to eql(13.5) }
+      end
+
+      context 'when negative' do
+        let(:dms) { '58°39′13.5 W' }
+
+        it { expect(subject.hemisphere).to eql(Libgeo::WEST) }
+        it { expect(subject.degrees).to eql(58) }
+        it { expect(subject.minutes).to eql(39) }
+        it { expect(subject.seconds).to eql(13.5) }
+      end
+    end
+
+    context 'without characters' do
+      context 'when positive' do
+        let(:dms) { '58°39′13.5' }
+
+        it { expect(subject.hemisphere).to eql(Libgeo::EAST) }
+        it { expect(subject.degrees).to eql(58) }
+        it { expect(subject.minutes).to eql(39) }
+        it { expect(subject.seconds).to eql(13.5) }
+      end
+
+      context 'when negative' do
+        let(:dms) { '-58°39′13.5' }
+
+        it { expect(subject.hemisphere).to eql(Libgeo::WEST) }
+        it { expect(subject.degrees).to eql(58) }
+        it { expect(subject.minutes).to eql(39) }
+        it { expect(subject.seconds).to eql(13.5) }
+      end
+    end
+  end
+
+  describe '.nmea' do
+    subject { described_class.nmea(nmea) }
+
+    context 'with characters' do
+      context 'when positive' do
+        let(:nmea) { '03920.56074,E' }
+
+        it { expect(subject.hemisphere).to eql(Libgeo::EAST) }
+        it { expect(subject.degrees).to eql(39) }
+        it { expect(subject.minutes).to eql(20) }
+        it { expect(subject.seconds).to eql(33.6444) }
+      end
+
+      context 'when negative' do
+        let(:nmea) { '03920.56074,W' }
+
+        it { expect(subject.hemisphere).to eql(Libgeo::WEST) }
+        it { expect(subject.degrees).to eql(39) }
+        it { expect(subject.minutes).to eql(20) }
+        it { expect(subject.seconds).to eql(33.6444) }
+      end
+    end
+
+    context 'without characters' do
+      context 'when positive' do
+        let(:nmea) { '+03920.56074' }
+
+        it { expect(subject.hemisphere).to eql(Libgeo::EAST) }
+        it { expect(subject.degrees).to eql(39) }
+        it { expect(subject.minutes).to eql(20) }
+        it { expect(subject.seconds).to eql(33.6444) }
+      end
+
+      context 'when negative' do
+        let(:nmea) { '-03920.56074' }
+
+        it { expect(subject.hemisphere).to eql(Libgeo::WEST) }
+        it { expect(subject.degrees).to eql(39) }
+        it { expect(subject.minutes).to eql(20) }
+        it { expect(subject.seconds).to eql(33.6444) }
+      end
+    end
+  end
   describe '.degrees_minutes' do
     subject { described_class.degrees_minutes(degrees, 20.56074) }
 
@@ -68,6 +155,18 @@ describe Libgeo::Longitude do
 
   describe '#seconds' do
     it_behaves_like 'Coordinate#seconds'
+  end
+
+  describe 'different inputs' do
+    it_behaves_like 'Coordinate#inputs' do
+      let(:hemisphere) { :E }
+    end
+  end
+
+  describe 'values validation' do
+    it_behaves_like 'Coordinate#validation' do
+      let(:max_degrees) { 180 }
+    end
   end
 
   describe '#hemisphere' do

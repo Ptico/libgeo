@@ -31,12 +31,25 @@ module Libgeo
     alias :deg  :degrees
     alias :mins :minutes
     alias :secs :seconds
+    alias :==   :eql?
 
     ##
     # Coordinate type
     #
     def type
       nil
+    end
+
+    ##
+    # Check coordinates equality
+    #
+    # Returns: {Boolean} true if coordinates are same
+    #
+    def eql?(other)
+      degrees.eql?(other.degrees) &&
+      minutes.eql?(other.minutes) &&
+      seconds.eql?(other.seconds) &&
+      hemisphere.eql?(other.hemisphere)
     end
 
     ##

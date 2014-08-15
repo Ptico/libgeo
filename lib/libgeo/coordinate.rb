@@ -31,7 +31,6 @@ module Libgeo
     alias :deg  :degrees
     alias :mins :minutes
     alias :secs :seconds
-    alias :==   :eql?
 
     ##
     # Coordinate type
@@ -51,6 +50,7 @@ module Libgeo
       seconds.eql?(other.seconds) &&
       hemisphere.eql?(other.hemisphere)
     end
+    alias_method :==, :eql?
 
     ##
     # Decimal minutes with seconds included

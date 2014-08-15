@@ -35,7 +35,8 @@ describe Libgeo::Coordinate do
       let(:second_params) { params }
 
       it 'coordinates should be same' do
-        expect(instance).to eql(second_instance)
+        expect(instance.eql?(second_instance)).to eql(true)
+        expect(instance == second_instance).to    eql(true)
       end
     end
 
@@ -44,7 +45,8 @@ describe Libgeo::Coordinate do
         let(:second_params) { params.merge(degrees: 20) }
 
         it 'should not be equal' do
-          expect(instance).to_not eql(second_instance)
+          expect(instance.eql?(second_instance)).to eql(false)
+          expect(instance == second_instance).to    eql(false)
         end
       end
 
@@ -52,7 +54,8 @@ describe Libgeo::Coordinate do
         let(:second_params) { params.merge(minutes: 30) }
 
         it 'should not be equal' do
-          expect(instance).to_not eql(second_instance)
+          expect(instance.eql?(second_instance)).to eql(false)
+          expect(instance == second_instance).to    eql(false)
         end
       end
 
@@ -60,7 +63,8 @@ describe Libgeo::Coordinate do
         let(:second_params) { params.merge(seconds: 6.6) }
 
         it 'should not be equal' do
-          expect(instance).to_not eql(second_instance)
+          expect(instance.eql?(second_instance)).to eql(false)
+          expect(instance == second_instance).to    eql(false)
         end
       end
 
@@ -68,7 +72,8 @@ describe Libgeo::Coordinate do
         let(:second_params) { params.merge(hemi: :S) }
 
         it 'should not be equal' do
-          expect(instance).to_not eql(second_instance)
+          expect(instance.eql?(second_instance)).to eql(false)
+          expect(instance == second_instance).to    eql(false)
         end
       end
     end

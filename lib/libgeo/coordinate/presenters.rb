@@ -56,6 +56,18 @@ module Libgeo
       end
 
       ##
+      # Represent coordinate as decimal
+      #
+      # Returns: {Decimal}
+      #
+      def to_decimal
+        result = degrees.to_d + minutes.to_d/60.0 + seconds.to_d/3600.0
+        result *= -1 if negative_hemisphere?
+
+        result
+      end
+
+      ##
       # Inspect string
       #
       def inspect

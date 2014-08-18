@@ -40,6 +40,19 @@ module Libgeo
     end
 
     ##
+    # Check coordinates equality
+    #
+    # Returns: {Boolean} true if coordinates are same
+    #
+    def eql?(other)
+      degrees.eql?(other.degrees) &&
+      minutes.eql?(other.minutes) &&
+      seconds.eql?(other.seconds) &&
+      hemisphere.eql?(other.hemisphere)
+    end
+    alias_method :==, :eql?
+
+    ##
     # Decimal minutes with seconds included
     #
     # Returns: {Float} minutes

@@ -375,19 +375,4 @@ describe Libgeo::Latitude do
     pending 'TODO'
   end
 
-  describe '.to_decimal' do
-    subject { described_class.decimal(decimal).to_decimal }
-
-    context 'when positive' do
-      let(:decimal) { 40.4040 }
-
-      it { expect(subject).to eql(decimal) }
-    end
-
-    context 'when negative' do
-      let(:decimal) { -40.4040 }
-
-      it { expect(subject).to eql(decimal) }
-    end
-  end
 end
